@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  username       String?  @unique
+  email          String?  @unique
+  image          String?
+  coverImage     String?
+  profileImage   String?
+  hashedPassword String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  elements      Element[]
+  nutritionPlan NutritionPlan[]
+}
+
+model Element {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  typeElement String //inicio de sesión - Tarjeta - identidad
+  isFavourite Boolean
+  urlWebsite  String?
+  username    String?
+  password    String?
+  notes       String?
+  userId      String  @db.ObjectId
+  directory   String?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NutritionPlan {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullName          String // Nombres y apellidos
+  weight            Float // Peso en kilogramos
+  height            Float // Altura en centímetros
+  bmi               Float? // IMC calculado
+  bmiClassification String? // Clasificación según IMC (bajo peso, normal, sobrepeso, obesidad)
+  age               Int // Edad
+  gender            String // Género (masculino/femenino)
+  bmr               Float? // BMR calculado
+  physicalActivity  String // Descripción de la actividad física
+  activityFactor    Float? // Factor de actividad física para el cálculo de calorías
+  targetCalories    Float? // Calorías objetivo
+
+  createdAt DateTime @default(now())
+
+  userId String @db.ObjectId
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
