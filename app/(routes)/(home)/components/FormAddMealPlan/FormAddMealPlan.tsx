@@ -77,6 +77,7 @@ export function FormAddMealPlan(props: FormAddMealPlanProps) {
         title: "Something went wrong",
         variant: "destructive",
       });
+      console.log(error);
     }
   };
 

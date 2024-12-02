@@ -78,6 +78,7 @@ export function FormAddElement(props: FormAddElementProps) {
         title: "Something went wrong",
         variant: "destructive",
       });
+      console.log(error);
     }
   };
 

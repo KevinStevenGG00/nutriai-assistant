@@ -4,10 +4,18 @@ import React, { useState } from "react";
 import * as mobilenet from "@tensorflow-models/mobilenet";
 import "@tensorflow/tfjs";
 
+interface NutritionalInfo {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fiber: number;
+}
+
 export default function GeneratorPage() {
   const [image, setImage] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
-  const [nutritionalInfo, setNutritionalInfo] = useState<any | null>(null);
+  const [nutritionalInfo, setNutritionalInfo] =
+    useState<NutritionalInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // Indicador de carga
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,9 +61,8 @@ export default function GeneratorPage() {
     return mappings[food.toLowerCase()] || food.toLowerCase();
   };
 
-  const getNutritionalInfo = (food: string) => {
-    // Base de datos estática de alimentos
-    const database: Record<string, any> = {
+  const getNutritionalInfo = (food: string): NutritionalInfo | null => {
+    const database: Record<string, NutritionalInfo> = {
       apple: { calories: 52, protein: 0.3, carbs: 14, fiber: 2.4 },
       banana: { calories: 89, protein: 1.1, carbs: 23, fiber: 2.6 },
       orange: { calories: 47, protein: 0.9, carbs: 12, fiber: 2.4 },

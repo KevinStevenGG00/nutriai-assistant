@@ -1,17 +1,7 @@
 "use client";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { BarChart, DoorClosed, House, RectangleEllipsis } from "lucide-react";
-import Link from "next/link";
+
+import { DoorClosed, House, RectangleEllipsis } from "lucide-react";
 import { SingleItem } from "../SingleItem";
-import {
-  dataSidebarElements,
-  dataSidebarConfiguration,
-} from "./SidebarRoutes.data";
 import { signOut } from "next-auth/react";
 
 export function SidebarRoutes() {

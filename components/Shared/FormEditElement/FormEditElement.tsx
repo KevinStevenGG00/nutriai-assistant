@@ -63,6 +63,8 @@ export function FormEditElement(props: FormEditElementProps) {
       });
       router.push("/");
     } catch (error) {
+      console.log(error);
+
       toast({
         title: "Something went wrong",
         variant: "destructive",

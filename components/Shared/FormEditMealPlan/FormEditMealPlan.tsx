@@ -58,6 +58,8 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
       });
       router.refresh();
     } catch (error) {
+      console.log(error);
+
       toast({
         title: "Something went wrong",
         variant: "destructive",

@@ -3,7 +3,6 @@ import { HeaderMain } from "./components/HeaderMain";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { TableData } from "./components/TableData";
 import { TableDataMealPlan } from "./components/TableDataMealPlan";
 
 export default async function Home() {

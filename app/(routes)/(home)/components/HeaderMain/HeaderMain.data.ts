@@ -1,4 +1,4 @@
-import { HeartPulse, KeyRound } from "lucide-react";
+import { HeartPulse } from "lucide-react";
 import { DataHeaderMainItemProps } from "./HeaderMain.types";
 
 export const dataHeaderMain: DataHeaderMainItemProps[] = [
