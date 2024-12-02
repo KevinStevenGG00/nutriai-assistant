@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function PATCH(req: Request, context: { params: { mealPlanId: string } }) {
+export async function PATCH(req: Request, { params}: { params: Promise <{mealPlanId: string}> }) {
   try {
-    const { mealPlanId } = await context.params;
+    const { mealPlanId } = await params;
 
     if (!mealPlanId) {
       return new NextResponse("Unauthorized: Missing mealPlanId", { status: 401 });

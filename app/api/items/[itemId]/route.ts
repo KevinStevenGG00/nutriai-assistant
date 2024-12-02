@@ -1,11 +1,12 @@
 import { db } from "@/lib/db"
 import { NextResponse } from "next/server"
 
-export async function PATCH(req: Request,
-    { params }: { params: { itemId: string } }
+export async function PATCH(
+    req: Request,
+    { params }: { params: Promise<{ itemId: string }> }
 ) {
     try {
-        const {itemId} = params;
+        const { itemId } = await params;
         const values = await req.json()
 
         if (!itemId) {
@@ -25,6 +26,6 @@ export async function PATCH(req: Request,
     } catch (error) {
         console.log(error);
         return new NextResponse("Internal Error", { status: 500 })
-        
     }
 }
+
