@@ -28,6 +28,7 @@ import { useEffect } from "react";
 import { FormEditMealPlanProps } from "./FormEditMealPlan.types";
 import { formSchema } from "./FormEditMealPlan.form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Trash } from "lucide-react";
 
 export function FormEditMealPlan(props: FormEditMealPlanProps) {
   const { dataMealPlan } = props;
@@ -57,6 +58,22 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
         title: "Meal plan edited ✅",
       });
       router.refresh();
+    } catch (error) {
+      console.log(error);
+
+      toast({
+        title: "Something went wrong",
+        variant: "destructive",
+      });
+    }
+  };
+  const deleteMealPlan = async () => {
+    try {
+      await axios.delete(`/api/mealPlan/${dataMealPlan.id}`);
+      toast({
+        title: "Meal plan removed ✅",
+      });
+      router.push("/");
     } catch (error) {
       console.log(error);
 
@@ -197,6 +214,15 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
 
   return (
     <div>
+      <div className="flex items-center text-xl mb-6">
+        <ArrowLeft
+          className="w-5 h-5 mr-2 cursor-pointer"
+          onClick={() => router.push("/")}
+        />
+        <h1 className="text-2xl font-bold text-center">
+          Editar Plan Nutricional
+        </h1>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -400,6 +426,15 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
           </div>
 
           <div className="col-span-full flex justify-end">
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => deleteMealPlan()}
+              className="mr-2"
+            >
+              <Trash className="h-4 w-4 mr-2" />
+              Eliminar
+            </Button>
             <Button type="submit">Guardar</Button>
           </div>
         </form>
