@@ -8,7 +8,7 @@ export default async function ElementPage({
 }: {
   params: { elementId: string };
 }) {
-  const { elementId } = await Promise.resolve(params);
+  const { elementId } = params; // No es necesario Promise.resolve()
 
   const session = await getServerSession();
   if (!session || !session.user?.email) {
@@ -22,7 +22,7 @@ export default async function ElementPage({
   });
 
   if (!element) {
-    redirect("/");
+    return redirect("/"); // Asegúrate de retornar aquí
   }
 
   return (
