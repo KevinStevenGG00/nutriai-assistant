@@ -1,4 +1,4 @@
-import { LayoutList, Star, Earth, Settings, UserPen, Lock, Landmark } from "lucide-react"
+import { LayoutList, Star, Earth, Settings, UserPen } from "lucide-react"
 
 export const dataSidebarElements = [
     {
