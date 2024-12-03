@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormEditMealPlanProps } from "./FormEditMealPlan.types";
 import { formSchema } from "./FormEditMealPlan.form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,12 @@ import { ArrowLeft, Trash } from "lucide-react";
 export function FormEditMealPlan(props: FormEditMealPlanProps) {
   const { dataMealPlan } = props;
   const router = useRouter();
+
+  const [macronutrients, setMacronutrients] = useState({
+    carbohydrates: "0",
+    proteins: "0",
+    fats: "0",
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,66 +95,149 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
 
   const bmiPlans: Record<
     BMIClassification,
-    { title: string; example: string[][] }
+    {
+      title: string;
+      example: {
+        meals: string[];
+        properties: {
+          calories: number;
+          carbohydrates: number;
+          proteins: number;
+          fats: number;
+        };
+      }[];
+    }
   > = {
     "Bajo peso": {
       title: "Plan para Bajo Peso",
       example: [
-        [
-          "Desayuno: 2 rebanadas de pan integral con aguacate y 2 huevos.",
-          "Almuerzo: Arroz integral con pollo y ensalada.",
-          "Cena: Pasta integral con atún y vegetales.",
-        ],
-        [
-          "Desayuno: Yogur griego con granola y frutas.",
-          "Almuerzo: Pollo a la parrilla con quinoa.",
-          "Cena: Ensalada con atún, huevo duro y aceite de oliva.",
-        ],
-        [
-          "Desayuno: Tostadas con aguacate y tomate.",
-          "Almuerzo: Ensalada de pollo con aguacate.",
-          "Cena: Sopa de lentejas con arroz integral.",
-        ],
+        {
+          meals: [
+            "Desayuno: 2 rebanadas de pan integral con aguacate y 2 huevos.",
+            "Almuerzo: Arroz integral con pollo y ensalada.",
+            "Cena: Pasta integral con atún y vegetales.",
+          ],
+          properties: {
+            calories: 2000,
+            carbohydrates: 250,
+            proteins: 80,
+            fats: 70,
+          },
+        },
+        {
+          meals: [
+            "Desayuno: Yogur griego con granola y frutas.",
+            "Almuerzo: Pollo a la parrilla con quinoa.",
+            "Cena: Ensalada con atún, huevo duro y aceite de oliva.",
+          ],
+          properties: {
+            calories: 2100,
+            carbohydrates: 260,
+            proteins: 85,
+            fats: 75,
+          },
+        },
+        {
+          meals: [
+            "Desayuno: Tostadas con aguacate y tomate.",
+            "Almuerzo: Ensalada de pollo con aguacate.",
+            "Cena: Sopa de lentejas con arroz integral.",
+          ],
+          properties: {
+            calories: 2200,
+            carbohydrates: 270,
+            proteins: 90,
+            fats: 80,
+          },
+        },
       ],
     },
     "Peso normal": {
       title: "Plan para Peso Normal",
       example: [
-        [
-          "Desayuno: Avena con miel y frutos rojos.",
-          "Almuerzo: Quinoa con salmón y brócoli.",
-          "Cena: Pollo con ensalada y pan integral.",
-        ],
-        [
-          "Desayuno: Tostadas con aguacate y huevo.",
-          "Almuerzo: Ensalada de atún con tomate y pepino.",
-          "Cena: Filete de pescado con espárragos.",
-        ],
-        [
-          "Desayuno: Yogur con frutos secos y miel.",
-          "Almuerzo: Pechuga de pavo con batata.",
-          "Cena: Sopa de verduras y ensalada.",
-        ],
+        {
+          meals: [
+            "Desayuno: Avena con miel y frutos rojos.",
+            "Almuerzo: Quinoa con salmón y brócoli.",
+            "Cena: Pollo con ensalada y pan integral.",
+          ],
+          properties: {
+            calories: 1800,
+            carbohydrates: 200,
+            proteins: 90,
+            fats: 60,
+          },
+        },
+        {
+          meals: [
+            "Desayuno: Tostadas con aguacate y huevo.",
+            "Almuerzo: Ensalada de atún con tomate y pepino.",
+            "Cena: Filete de pescado con espárragos.",
+          ],
+          properties: {
+            calories: 1900,
+            carbohydrates: 210,
+            proteins: 95,
+            fats: 65,
+          },
+        },
+        {
+          meals: [
+            "Desayuno: Yogur con frutos secos y miel.",
+            "Almuerzo: Pechuga de pavo con batata.",
+            "Cena: Sopa de verduras y ensalada.",
+          ],
+          properties: {
+            calories: 2000,
+            carbohydrates: 220,
+            proteins: 100,
+            fats: 70,
+          },
+        },
       ],
     },
     Sobrepeso: {
       title: "Plan para Sobrepeso/Obesidad",
       example: [
-        [
-          "Desayuno: 2 claras de huevo con espinacas.",
-          "Almuerzo: Pollo a la plancha con ensalada y batata.",
-          "Cena: Sopa de verduras y tofu salteado.",
-        ],
-        [
-          "Desayuno: 1 batido de proteína con avena.",
-          "Almuerzo: Pescado a la parrilla con ensalada de pepino.",
-          "Cena: Verduras al vapor con tofu.",
-        ],
-        [
-          "Desayuno: Café negro con 1 rebanada de pan integral.",
-          "Almuerzo: Pollo con ensalada de espinacas.",
-          "Cena: Calabacín con pechuga de pollo.",
-        ],
+        {
+          meals: [
+            "Desayuno: 2 claras de huevo con espinacas.",
+            "Almuerzo: Pollo a la plancha con ensalada y batata.",
+            "Cena: Sopa de verduras y tofu salteado.",
+          ],
+          properties: {
+            calories: 1500,
+            carbohydrates: 120,
+            proteins: 100,
+            fats: 40,
+          },
+        },
+        {
+          meals: [
+            "Desayuno: 1 batido de proteína con avena.",
+            "Almuerzo: Pescado a la parrilla con ensalada de pepino.",
+            "Cena: Verduras al vapor con tofu.",
+          ],
+          properties: {
+            calories: 1600,
+            carbohydrates: 130,
+            proteins: 105,
+            fats: 45,
+          },
+        },
+        {
+          meals: [
+            "Desayuno: Café negro con 1 rebanada de pan integral.",
+            "Almuerzo: Pollo con ensalada de espinacas.",
+            "Cena: Calabacín con pechuga de pollo.",
+          ],
+          properties: {
+            calories: 1700,
+            carbohydrates: 140,
+            proteins: 110,
+            fats: 50,
+          },
+        },
       ],
     },
   };
@@ -189,21 +279,37 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
 
     let classification = "";
     let targetCalories = 0;
+    let carbs = 0;
+    let proteins = 0;
+    let fats = 0;
+
     if (bmi < 18.5) {
       classification = "Bajo peso";
       targetCalories = 1.15 * bmr * activityFactor;
+      carbs = (0.5 * targetCalories) / 4;
+      proteins = (0.2 * targetCalories) / 4;
+      fats = (0.3 * targetCalories) / 9;
     } else if (bmi >= 18.5 && bmi <= 24.9) {
       classification = "Peso normal";
       targetCalories = bmr * activityFactor;
-    } else if (bmi >= 25 && bmi <= 29.9) {
-      classification = "Sobrepeso";
+      carbs = (0.4 * targetCalories) / 4;
+      proteins = (0.3 * targetCalories) / 4;
+      fats = (0.3 * targetCalories) / 9;
+    } else if (bmi >= 25) {
+      classification = bmi >= 30 ? "Obesidad" : "Sobrepeso";
       targetCalories = 0.8 * bmr * activityFactor;
-    } else if (bmi >= 30) {
-      classification = "Obesidad";
-      targetCalories = 0.8 * bmr * activityFactor;
+      carbs = (0.3 * targetCalories) / 4;
+      proteins = (0.4 * targetCalories) / 4;
+      fats = (0.3 * targetCalories) / 9;
     }
+
     form.setValue("bmiClassification", classification);
     form.setValue("targetCalories", targetCalories.toFixed(2).toString());
+    setMacronutrients({
+      carbohydrates: carbs.toFixed(2).toString(),
+      proteins: proteins.toFixed(2).toString(),
+      fats: fats.toFixed(2).toString(),
+    });
   }, [
     form.watch("weight"),
     form.watch("height"),
@@ -424,7 +530,29 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
               )}
             />
           </div>
-
+          <div className="grid md:grid-cols-3 gap-x-4">
+            <FormItem>
+              <FormLabel>Carbohidratos (g)</FormLabel>
+              <FormControl>
+                <Input value={macronutrients.carbohydrates} readOnly />
+              </FormControl>
+              <FormDescription>Cada gramo(g) aporta 4kcal</FormDescription>
+            </FormItem>
+            <FormItem>
+              <FormLabel>Proteínas (g)</FormLabel>
+              <FormControl>
+                <Input value={macronutrients.proteins} readOnly />
+              </FormControl>
+              <FormDescription>Cada gramo(g) aporta 4kcal</FormDescription>
+            </FormItem>
+            <FormItem>
+              <FormLabel>Grasas (g)</FormLabel>
+              <FormControl>
+                <Input value={macronutrients.fats} readOnly />
+              </FormControl>
+              <FormDescription>Cada gramo(g) aporta 9kcal</FormDescription>
+            </FormItem>
+          </div>
           <div className="col-span-full flex justify-end">
             <Button
               type="button"
@@ -444,7 +572,7 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
         <div className="flex flex-nowrap gap-5 pb-4">
           {Object.entries(bmiPlans).map(([key, plan]) => {
             if (form.getValues("bmiClassification") === key) {
-              return plan.example.map((mealOptions, index) => (
+              return plan.example.map((mealPlan, index) => (
                 <div
                   key={`mealOption-${index}`}
                   className="flex-none w-[300px]"
@@ -457,10 +585,18 @@ export function FormEditMealPlan(props: FormEditMealPlanProps) {
                     </CardHeader>
                     <CardContent>
                       <ul className="list-disc pl-5 space-y-2">
-                        {mealOptions.map((item, itemIndex) => (
+                        {mealPlan.meals.map((item, itemIndex) => (
                           <li key={itemIndex}>{item}</li>
                         ))}
                       </ul>
+                      <div className="mt-4 text-sm text-gray-600">
+                        <p>Calorías: {mealPlan.properties.calories} kcal</p>
+                        <p>
+                          Carbohidratos: {mealPlan.properties.carbohydrates} g
+                        </p>
+                        <p>Proteínas: {mealPlan.properties.proteins} g</p>
+                        <p>Grasas: {mealPlan.properties.fats} g</p>
+                      </div>
                     </CardContent>
                   </Card>
                 </div>

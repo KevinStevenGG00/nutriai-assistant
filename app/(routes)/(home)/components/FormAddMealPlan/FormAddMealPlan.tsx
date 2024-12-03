@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,11 +27,17 @@ import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { FormAddMealPlanProps } from "./FormAddMealPlan.types";
 import { formSchema } from "./FormAddMealPlan.form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function FormAddMealPlan(props: FormAddMealPlanProps) {
   const { userId, closeDialog } = props;
   const router = useRouter();
+
+  const [macronutrients, setMacronutrients] = useState({
+    carbohydrates: "0",
+    proteins: "0",
+    fats: "0",
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -118,21 +125,37 @@ export function FormAddMealPlan(props: FormAddMealPlanProps) {
 
     let classification = "";
     let targetCalories = 0;
+    let carbs = 0;
+    let proteins = 0;
+    let fats = 0;
+
     if (bmi < 18.5) {
       classification = "Bajo peso";
       targetCalories = 1.15 * bmr * activityFactor;
+      carbs = (0.5 * targetCalories) / 4;
+      proteins = (0.2 * targetCalories) / 4;
+      fats = (0.3 * targetCalories) / 9;
     } else if (bmi >= 18.5 && bmi <= 24.9) {
       classification = "Peso normal";
       targetCalories = bmr * activityFactor;
-    } else if (bmi >= 25 && bmi <= 29.9) {
-      classification = "Sobrepeso";
+      carbs = (0.4 * targetCalories) / 4;
+      proteins = (0.3 * targetCalories) / 4;
+      fats = (0.3 * targetCalories) / 9;
+    } else if (bmi >= 25) {
+      classification = bmi >= 30 ? "Obesidad" : "Sobrepeso";
       targetCalories = 0.8 * bmr * activityFactor;
-    } else if (bmi >= 30) {
-      classification = "Obesidad";
-      targetCalories = 0.8 * bmr * activityFactor;
+      carbs = (0.3 * targetCalories) / 4;
+      proteins = (0.4 * targetCalories) / 4;
+      fats = (0.3 * targetCalories) / 9;
     }
+
     form.setValue("bmiClassification", classification);
     form.setValue("targetCalories", targetCalories.toFixed(2).toString());
+    setMacronutrients({
+      carbohydrates: carbs.toFixed(2).toString(),
+      proteins: proteins.toFixed(2).toString(),
+      fats: fats.toFixed(2).toString(),
+    });
   }, [
     form.watch("weight"),
     form.watch("height"),
@@ -343,7 +366,29 @@ export function FormAddMealPlan(props: FormAddMealPlanProps) {
               )}
             />
           </div>
-
+          <div className="grid md:grid-cols-3 gap-x-4">
+            <FormItem>
+              <FormLabel>Carbohidratos (g)</FormLabel>
+              <FormControl>
+                <Input value={macronutrients.carbohydrates} readOnly />
+              </FormControl>
+              <FormDescription>Cada gramo(g) aporta 4kcal</FormDescription>
+            </FormItem>
+            <FormItem>
+              <FormLabel>Proteínas (g)</FormLabel>
+              <FormControl>
+                <Input value={macronutrients.proteins} readOnly />
+              </FormControl>
+              <FormDescription>Cada gramo(g) aporta 4kcal</FormDescription>
+            </FormItem>
+            <FormItem>
+              <FormLabel>Grasas (g)</FormLabel>
+              <FormControl>
+                <Input value={macronutrients.fats} readOnly />
+              </FormControl>
+              <FormDescription>Cada gramo(g) aporta 9kcal</FormDescription>
+            </FormItem>
+          </div>
           <div className="col-span-full flex justify-end">
             <Button type="submit">Guardar</Button>
           </div>

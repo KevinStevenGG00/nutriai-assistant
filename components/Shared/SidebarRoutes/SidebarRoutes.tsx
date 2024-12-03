@@ -3,6 +3,14 @@
 import { DoorClosed, House, RectangleEllipsis } from "lucide-react";
 import { SingleItem } from "../SingleItem";
 import { signOut } from "next-auth/react";
+import { dataSidebarConfiguration } from "./SidebarRoutes.data";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import Link from "next/link";
 
 export function SidebarRoutes() {
   return (
@@ -46,7 +54,7 @@ export function SidebarRoutes() {
         icon={RectangleEllipsis}
       />
 
-      {/* {dataSidebarConfiguration.map(({ title, icon: Icon, children }) => (
+      {dataSidebarConfiguration.map(({ title, icon: Icon, children }) => (
         <Accordion
           type="single"
           collapsible
@@ -86,7 +94,7 @@ export function SidebarRoutes() {
           </AccordionItem>
         </Accordion>
       ))}
-      <SingleItem href="/analytics" label="Analytics" icon={BarChart} /> */}
+      {/* <SingleItem href="/analytics" label="Analytics" icon={BarChart} /> */}
       <hr className="my-4 border-t border-gray-200" />
       <SingleItem
         onClick={() => signOut()}
